@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 llm = Ollama(model="llama3:8b", temperature=0) 
 
-print(llm.invoke("Please let the user know whether the LLM is working. Do not ask any questions. Also let the user know pytesseract has successfully been setup."))
+print(f'\n{llm.invoke("Please let the user know whether the LLM is working. Do not ask any questions.")}')
 
 img = Image.open("test.png")
 
@@ -19,5 +19,6 @@ img = Image.open("test.png")
 extracted_text = pytesseract.image_to_string(img)
 
 # Print the result
-print("Extracted Text:")
+print("\nExtracted Text:")
 print(extracted_text.strip())
+print("\n")
