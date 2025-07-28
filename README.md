@@ -79,7 +79,7 @@ This method uses a virtual environment (venv) and pip, which is a more tradition
 
 ##### Installing Tesseract
 
-To use the OCR library `pytesseract` we need to make sure `tesseract` is installed on the system/PATH, if you follow method 1 conda manages this installation - however tesseract cannot be installed using `pip` so for Method 2 we have to do a system-wide installation. 
+To use the OCR library `pytesseract` we need to make sure `tesseract` is installed on the system/PATH, if you follow method 1 conda manages this installation - however tesseract cannot be installed using `pip` so for Method 2 we have to do a system installation. 
 
 Details for installing `tesseract` are included here:
 https://www.geeksforgeeks.org/python/introduction-to-python-pytesseract-package/
@@ -91,7 +91,7 @@ brew install tesseract
 
 ##### Setting up virtual environment
 
-Navigate to conclude-dev/backend:
+Navigate to conclude/backend:
 ```
 cd backend
 ```
@@ -118,12 +118,12 @@ To check your environment has been configured properly run:
 ```
 python setup-test.py
 ```
-Make sure Ollama is running in the background and your virtual environment is activated. If you are using `venv` (Method 2) make sure it is activated with `source venv/bin/activate` or if you are using `conda` (Method 1) make sure it is activated with `conda activate conclude` 
+Make sure Ollama is running in the background and your virtual environment is activated. If you are using `venv` (Method 2) make sure it is activated with `source venv/bin/activate` or if you are using `conda` (Method 1) make sure it is activated with `conda activate conclude`, also make sure you are in the conclude/backend directory.
 
 Once you have the basic code running I'd recommend playing around with the code in setup-test.py so you can get an idea for how interacting with LLMs and prompts work as well as OCR - try loading in and reading out different images. If you setup your virtual environment with conda you can also test this out in `playground.ipynb` which is a Juypter notebook so easier to experiment with and test individual code cells. Just make sure you are using the anaconda `conclude` environment for the kernel.
 
 #### Bank Statement Scanning
-Once you are comfortable with the setup and running basic functions you can try working with the backend/ML/bank_scanning.py code.
+Once you are comfortable with the setup and running basic functions you can try working with the backend/bank_scanning.py code.
 
 The main task associated with this code is prompt engineering - adjusting the prompts to provide better insight into the bank statements and formatted outputs.
 
@@ -132,11 +132,13 @@ The main task associated with this code is prompt engineering - adjusting the pr
 Next we will want to run the client. The client (also known as frontend) will be what the user interacts with. We are using React for the frontend.
 
 ### Getting started
-To setup the client make sure to enter the directory conclude-dev/client:
+To setup the client make sure to enter the directory conclude/client:
 ```
 cd client
 ```
-Then install any dependencies:
+If you were in the backend directory before you can run `cd ..` to get out and then `cd client` to enter the frontend side.
+
+Once you are in the correct repo install any dependencies:
 ```
 npm install
 ```
@@ -145,9 +147,9 @@ You should then be able to run the frontend:
 ```
 npm run dev
 ```
-Navigate to the link provided and you should be able to see the frontend running.
+Navigate to the link provided e.g. http://localhost:5173/ and you should be able to see the frontend running on the browser.
 
 # Connecting Frontend and Backend
-To enable the frontend and backend to communicate simply make sure you have run `python server.py` and `npm run dev` in two seperate split terminals. This will mean the backend and frontend are both running at the same time and should be able to interact with each other.
+To enable the frontend and backend to communicate simply make sure you have run `python server.py` and `npm run dev` in two seperate terminals - you can do this in vscode by creating a split terminal. This will mean the backend and frontend are both running at the same time and should be able to interact with each other.
 
-That should be everything :) 
+That should be everything :)
