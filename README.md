@@ -1,6 +1,4 @@
-# Conclude-dev
-
-## Backend
+# Backend
 The Backend is used for managing the application API and server. The server is currently run using Flask, however migrating to FastAPI may be better for future development.
 
 ### Getting Started 
@@ -130,7 +128,7 @@ Once you are comfortable with the setup and running basic functions you can try 
 The main task associated with this code is prompt engineering - adjusting the prompts to provide better insight into the bank statements and formatted outputs.
 
 
-## Client
+# Client
 Next we will want to run the client. The client (also known as frontend) will be what the user interacts with. We are using React for the frontend.
 
 ### Getting started
@@ -149,7 +147,7 @@ npm run dev
 ```
 Navigate to the link provided and you should be able to see the frontend running.
 
-## Connecting Frontend and Backend
+# Connecting Frontend and Backend
 To enable the frontend and backend to communicate simply make sure you have run `python server.py` and `npm run dev` in two seperate split terminals. This will mean the backend and frontend are both running at the same time and should be able to interact with each other.
 
 That should be everything :) 

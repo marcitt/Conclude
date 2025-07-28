@@ -3,3 +3,5 @@ pdf2image
 pytesseract
 langchain-community
 ollama
+flask
+flask_cors
