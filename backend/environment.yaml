@@ -1,0 +1,17 @@
+name: conclude
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - streamlit
+  - pdf2image
+  - pytesseract
+  - tesseract
+  - flask
+  - flask-cors
+  - pip
+  - pip:
+      - langchain-community
+      - ollama
+
