@@ -10,8 +10,10 @@ dependencies:
   - tesseract
   - flask
   - flask-cors
+  - ipykernel
   - pip
   - pip:
       - langchain-community
       - ollama
+
 
