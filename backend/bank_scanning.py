@@ -3,6 +3,11 @@ from langchain_community.llms import Ollama
 import pytesseract
 import re
 
+from langchain.output_parsers import ListOutputParser, PydanticOutputParser
+from pydantic import BaseModel
+import pydantic
+import json
+
 import warnings
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
@@ -24,36 +29,84 @@ def account_scan(file_path):
         text = pytesseract.image_to_string(page)
         text_data += text + '\n'
 
-    print(text_data)
+    # print(text_data)
 
     llm = Ollama(model="llama3:8b", temperature=0) 
 
 
     prompt3 = f"""
-    You have are a financial assistant. 
+    You are a financial assistant. 
 
-    Your overall task is to identify subscriptions from financial data to identify accounts that need to be closed for a bereaved individual.
+    Your task is to identify **subscriptions** from unstructured financial data.
 
-    The financial data will be supplied as unstructured text.
+    Please follow these steps:
+    1. Convert the unstructured data into structured transaction records (e.g., date and description).
+    2. Identify recurring payments that follow a pattern (e.g., monthly, weekly).
+    - These indicate subscription services.
+    - Exclude recurring purchases like groceries, transport, or one-off items.
+    3. Based on recurring transactions, identify likely **subscriptions**.
+    4. Only include subscriptions that are **regular in timing** (not randomly spaced).
+    5. Use the evidence to output an array of objects in the **exact format** shown below.
 
-    Follow these steps:
-    (1) Convert the unstructured text to structured transaction data e.g. with date and description.
-    (2) Use this information to identify payments that have a regular recurring payment pattern e.g. occur monthly or that are indictative of a subscription service. Please ignore regular payments that are indicative of other regular purchases such as groceries or travel expenses. Also make sure there is a regularity to the dates.
-    (3) Use this information to identify potential subscriptions.
-    (4) Using this information list the potential subscriptions supplying evidence - only include subscriptions that have a pattern to their payment type e.g. monthly or weekly - not a repeated payment occurring at random intervals.
-    (5) Using this information provide as a response to the user the potential subscriptions.
+    Here is an example format — your output MUST look exactly like this:
+    [
+    {{ "account": "Vodafone", "type": "Monthly", "lastPayment": "2025-07-10" }},
+    {{ "account": "Concern", "type": "Yearly", "lastPayment": "2025-01-11" }}
+    ]
 
-    Here is an example of a payment that is not a subscription: ('15/03/2025', 'APPLE PAY Tesco')
-    Here is an example of a payment that is not a subscription: ('14/02/2025', 'CHIP & PIN TfL')
-    Here is an example of a payment that is a subscription: ('18/02/2025', 'ONLINE PAYMENT OpenAIl ($24.00, Rate: 1.2474)')
+    🔴 IMPORTANT:
+    - DO NOT add any explanations, summaries, headers, or markdown.
+    - DO NOT return anything outside of the array.
+    - DO NOT hallucinate data. Only use what is given.
 
-    ONLY USE THE DATA PROVIDED. DO NOT HALLUCINATE.
+    Examples:
+    ❌ Not a subscription: ('15/03/2025', 'APPLE PAY Tesco')
+    ❌ Not a subscription: ('14/02/2025', 'CHIP & PIN TfL')
+    ✅ Is a subscription: ('18/02/2025', 'ONLINE PAYMENT OpenAI ($24.00, Rate: 1.2474)')
 
-    Here is the data: {text_data}
-
+    Here is the data:
+    {text_data}
     """
 
-    return(llm.invoke(prompt3))
+
+
+    raw_response = llm.invoke(prompt3)
+
+    print(raw_response)
+
+    # raw_response is a JSON string array; parse it to Python list before returning
+    try:
+        parsed_response = json.loads(raw_response)
+    except json.JSONDecodeError:
+        print("Failed to parse LLM output:", raw_response)
+        parsed_response = []
+
+
+
+    return parsed_response
+
+
+
+class Subscription(BaseModel):
+    account: str
+    type: str
+    lastPayment: str
+
+
 
 if __name__ == "__main__":
-    account_scan("uploads/test-bank.pdf")
+    llm_output = json.loads(account_scan("uploads/Mock Data.pdf"))
+
+    print(json.dumps(llm_output))
+
+    # print("llm_output:", repr(llm_output))
+
+    # llm_output = '''
+    # [
+    # {"account": "Streamly Media", "type": "Monthly", "lastPayment": "2025-07-14"},
+    # {"account": "FitLife Center", "type": "Monthly", "lastPayment": "2025-07-10"}
+    # ]
+    # '''
+    # print(pydantic.VERSION)
+    # parser = ListOutputParser(item_parser=PydanticOutputParser(Subscription))
+    # output = parser.parse(llm_output)  # output is a list of Subscription instances

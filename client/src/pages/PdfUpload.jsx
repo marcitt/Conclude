@@ -1,6 +1,6 @@
-// src/pages/PdfUpload.jsx
 import { useState } from "react";
 import axios from "axios";
+import PaymentTable from "../components/PaymentTable";
 
 const client = axios.create({
   baseURL: "http://localhost:8080",
@@ -8,7 +8,8 @@ const client = axios.create({
 
 export default function PdfUpload() {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState(null);
+  const [subscriptions, setSubscriptions] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -23,14 +24,22 @@ export default function PdfUpload() {
 
     try {
       const response = await client.post("/upload-pdf", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setResult(response.data.result);
-    } catch (error) {
-      console.error("Upload error", error);
-      setResult("Failed to upload PDF");
+
+      const raw = response.data.result;
+      const clean = raw.replace(/'/g, '"'); // replace single with double quotes
+      const parsed = JSON.parse(clean);
+
+      console.log("Parsed subscriptions:", parsed);
+      setSubscriptions(parsed);
+      console.log("Current subscriptions state:", subscriptions);
+
+      
+    } catch (err) {
+      console.error(err);
+      setError("Failed to upload PDF or parse subscriptions");
+      setSubscriptions(null);
     }
   };
 
@@ -42,11 +51,13 @@ export default function PdfUpload() {
         <button type="submit">Upload</button>
       </form>
 
-      {result && (
-        <div>
-          <h2>Result:</h2>
-          <p>{result}</p>
-        </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+
+
+      {/* Render table only if subscriptions exist */}
+      {subscriptions && subscriptions.length > 0 && (
+        <PaymentTable subscriptions={subscriptions} />
       )}
     </div>
   );
