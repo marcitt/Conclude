@@ -15,6 +15,16 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def members():
     return {"members": ["Member 1", "Member 2", "Member 3"]}
 
+@app.route("/api/cancel_subscriptions", methods=["POST"])
+def cancel_subscriptions():
+    data = request.json
+    accounts = data.get("accounts", [])
+    
+    # Your cancellation logic here
+    print("Accounts to cancel:", accounts)
+
+    return jsonify({"status": "success", "cancelled": accounts})
+
 @app.route("/upload-pdf", methods=["POST"])
 def upload_pdf():
     if "file" not in request.files:
