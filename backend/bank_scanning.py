@@ -49,10 +49,7 @@ def account_scan(file_path):
     5. Use the evidence to output an array of objects in the **exact format** shown below.
 
     Here is an example format — your output MUST look exactly like this:
-    [
-    {{ "account": "Vodafone", "type": "Monthly", "lastPayment": "2025-07-10" }},
-    {{ "account": "Concern", "type": "Yearly", "lastPayment": "2025-01-11" }}
-    ]
+    [{{ "account": "Vodafone", "type": "Monthly", "lastPayment": "2025-07-10" }},{{ "account": "Concern", "type": "Yearly", "lastPayment": "2025-01-11" }}]
 
     🔴 IMPORTANT:
     - DO NOT add any explanations, summaries, headers, or markdown.

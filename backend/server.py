@@ -4,7 +4,7 @@ import os
 
 import time
 
-# from bank_scanning import account_scan
+from bank_scanning import account_scan
 
 app = Flask(__name__)
 CORS(app, origins="*")
@@ -12,20 +12,6 @@ CORS(app, origins="*")
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-@app.route("/members", methods=["GET"])
-def members():
-    return {"members": ["Member 1", "Member 2", "Member 3"]}
-
-@app.route("/api/cancel_subscriptions", methods=["POST"])
-def cancel_subscriptions():
-    data = request.json
-    accounts = data.get("accounts", [])
-    
-    # Your cancellation logic here
-    print("Accounts to cancel:", accounts)
-
-    return jsonify({"status": "success", "cancelled": accounts})
 
 @app.route("/upload-pdf", methods=["POST"])
 def upload_pdf():
@@ -44,16 +30,16 @@ def upload_pdf():
 
     # Your custom PDF processing logic here
     # Example (mocked response):
-    # processed_data = str(account_scan(filepath))
+    processed_data = account_scan(filepath)
 
     
 
-    processed_data = [
-    {"account": "netflix", "type": "monthly", "lastPayment": "tuesday"},
-    {"account": "spotify", "type": "yearly", "lastPayment": "wednesday"},
-    ]
+    # processed_data = [
+    # {"account": "netflix", "type": "monthly", "lastPayment": "tuesday"},
+    # {"account": "spotify", "type": "yearly", "lastPayment": "wednesday"},
+    # ]
 
-    time.sleep(2)
+    # time.sleep(2)
 
     return jsonify({"status": "success", "result": processed_data})
 
