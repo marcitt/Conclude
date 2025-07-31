@@ -8,12 +8,13 @@ dependencies:
   - pdf2image
   - pytesseract
   - tesseract
-  - flask
-  - flask-cors
   - ipykernel
   - pip
   - pip:
+      - fastapi
+      - uvicorn[standard]
       - langchain-community
       - ollama
+
 
 
