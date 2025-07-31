@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 
 from bank_scanning import account_scan
 
@@ -47,3 +48,21 @@ def upload_pdf(file: UploadFile = File(...)):
     processed_data = account_scan(filepath)
 
     return {"status": "success", "result": processed_data}
+
+@app.get("/tasks")
+def get_task():
+    tasks = [
+        {
+            "title": "Upload Bank Statement",
+            "description": "Next step is upload.",
+        },
+        {
+            "title": "Review Pending Cancellations",
+            "description": "Check for any accounts awaiting review.",
+        },
+        {
+            "title": "Confirm Completed Actions",
+            "description": "Verify that all tasks have been completed.",
+        },
+    ]
+    return JSONResponse(content={"tasks": tasks})

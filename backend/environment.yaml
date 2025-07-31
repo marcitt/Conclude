@@ -9,6 +9,7 @@ dependencies:
   - pytesseract
   - tesseract
   - ipykernel
+  - networkx
   - pip
   - pip:
       - fastapi

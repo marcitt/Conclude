@@ -1,19 +1,24 @@
+import { useEffect, useState } from 'react';
+import axios from "axios";
+
+const client = axios.create({
+    baseURL: "http://localhost:8080",
+});
+
 export default function Dashboard() {
 
-    const tasks = [
-        {
-            title: 'Upload Bank Statement',
-            description: 'Submit your most recent PDF statement.',
-        },
-        {
-            title: 'Review Pending Cancellations',
-            description: 'Check for any accounts awaiting review.',
-        },
-        {
-            title: 'Confirm Completed Actions',
-            description: 'Verify that all tasks have been completed.',
-        },
-    ];
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        client.get('/tasks')
+            .then(res => {
+                setTasks(res.data.tasks);
+            })
+            .catch(error => {
+                console.error('Error fetching tasks:', error);
+            });
+    }, []);
+
 
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-GB", {
