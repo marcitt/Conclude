@@ -1,108 +1,51 @@
-// src/pages/Dashboard.jsx
+export default function Dashboard() {
 
-import React from "react";
-import { Link } from "react-router-dom";
-import tasks from "../data/tasks";
-import ArticlesSidebar from "../components/ArticlesSidebar"; // adjust path as needed
+    const tasks = [
+        {
+            title: 'Upload Bank Statement',
+            description: 'Submit your most recent PDF statement.',
+        },
+        {
+            title: 'Review Pending Cancellations',
+            description: 'Check for any accounts awaiting review.',
+        },
+        {
+            title: 'Confirm Completed Actions',
+            description: 'Verify that all tasks have been completed.',
+        },
+    ];
 
-const today = new Date();
-const formattedDate = today.toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
 
-const articles = [
-  {
-    id: 1,
-    title: "How to Save More Money",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Understanding Your Bank Statement",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-    link: "#",
-  },
-];
+    return (
+        <div>
 
-function TaskSteps({ steps }) {
-  return (
-    <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-      {steps.map(step => (
-        <Link
-          key={step.id}
-          to={step.path}
-        >
-          <span>
-            {step.title}
-          </span>
-        </Link>
-      ))}
-    </div>
-  );
-}
+            <aside className="aside left"></aside>
 
-export default function Dashboard({ userName }) {
-  return (
-     <div
-  style={{
-    marginTop: "100px",
-    marginRight: "300px",  // space for sidebar on right
-    marginLeft: "auto",   // push content from left side
-    paddingLeft: "2rem",  // add some space from left edge
-    maxWidth: "1200px",   // wider max width to give more horizontal room
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-  }}>
-      <div>
-      <p style={{ textAlign: "left" }}>{formattedDate}</p>
-      <h1 style={{ textAlign: "left" }}>Welcome back {userName}</h1>
-      <p style={{ textAlign: "left" }}>Let's take a look at some upcoming steps</p>
+            <aside className="aside right"></aside>
 
-      {/* NEW: flex container to hold tasks and sidebar side by side */}
-      <div style={{ display: "flex", gap: "2rem", alignItems: "flex-start" }}>
-        {/* Tasks container: flex-grow so it takes available space */}
-        <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", gap: "2rem" }}>
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              style={{
-                border: "1px solid #E9E9E9",
-                borderRadius: "12px",
-                padding: "1.5rem",
-                backgroundColor: "#F3F3FF",
-              }}
-            >
-              <h3 style={{ marginBottom: "0.5rem", color: "#2F2E30" }}>{task.title}</h3>
-              <p style={{ margin: 0, color: "#5a5a5a" }}>{task.description}</p>
-              <TaskSteps steps={task.steps} />
+            <div className="appcontent dashboard">
+                <p>{formattedDate}</p>
+                <h1>Welcome back, Sarah</h1>
+                <p>Let’s take a look at some upcoming steps:</p>
+
+                <div className="task-cards">
+                    {tasks.map((task, index) => (
+                        <div className="task-card" key={index}>
+                            <h2>{task.title}</h2>
+                            <p>{task.description}</p>
+                        </div>
+                    ))}
+                </div>
+
             </div>
-          ))}
+
+
         </div>
-      </div>
-
-        {/* Sidebar */}
-        <aside
-        style={{
-          position: "fixed",
-          top: "0",
-          right: "0",
-          width: "300px",
-          height: "100vh",
-          borderLeft: "1px solid #e9e9e9",
-          padding: "1rem",
-          backgroundColor: "#fafaff",
-          overflowY: "auto",
-          boxSizing: "border-box",
-        }}
-        >
-          <ArticlesSidebar />
-        </aside>
-      </div>
-    </div>
-  );
+    );
 }
-

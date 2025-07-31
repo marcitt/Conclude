@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 
-from bank_scanning import account_scan
+import time
+
+# from bank_scanning import account_scan
 
 app = Flask(__name__)
 CORS(app, origins="*")
@@ -42,7 +44,16 @@ def upload_pdf():
 
     # Your custom PDF processing logic here
     # Example (mocked response):
-    processed_data = str(account_scan(filepath))
+    # processed_data = str(account_scan(filepath))
+
+    
+
+    processed_data = [
+    {"account": "netflix", "type": "monthly", "lastPayment": "tuesday"},
+    {"account": "spotify", "type": "yearly", "lastPayment": "wednesday"},
+    ]
+
+    time.sleep(2)
 
     return jsonify({"status": "success", "result": processed_data})
 
